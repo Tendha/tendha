@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TENDHA Fortnite — Premium Account Marketplace</title>
+<meta name="description" content="TENDHA Fortnite — Browse premium, verified Fortnite accounts. Live inventory, real stats, fast delivery.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" defer></script>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="brand">
+      <div class="brand-logo">T</div>
+      <div><span class="b1">TENDHA</span><span class="b2">Fortnite</span></div>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link active">Home</a>
+      <a href="catalog.html" class="nav-link">Catalog</a>
+      <a href="#about" class="nav-link">About</a>
+      <a href="#contact" class="nav-link cta show-mobile">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag"><span class="live-dot"></span>Live Inventory</div>
+    <h1>Rare skins.<br>Stacked accounts.<br>Trusted delivery.</h1>
+    <p class="sub">Hundreds of hand-picked Fortnite accounts — OG skins, exclusive emotes, championship auras. Verified, ready to play, delivered fast.</p>
+    <div class="hero-cta">
+      <a class="btn primary" href="catalog.html">Browse the catalog →</a>
+      <a class="btn ghost" href="#how">How it works</a>
+    </div>
+  </div>
+</header>
+
+<!-- Live dashboard panel -->
+<section class="container" style="margin-top:-20px">
+  <div class="kpis">
+    <div class="card kpi k-green"><div class="v" id="kpi-avail">—</div><div class="k">Available now</div><div class="sub-k">Ready to ship</div></div>
+    <div class="card kpi k-blue"><div class="v" id="kpi-total">—</div><div class="k">Total accounts</div><div class="sub-k">In the catalog</div></div>
+    <div class="card kpi k-purple"><div class="v" id="kpi-avg">—</div><div class="k">Avg price</div><div class="sub-k">USD</div></div>
+    <div class="card kpi k-gold"><div class="v" id="kpi-tags">—</div><div class="k">Unique tags</div><div class="sub-k">Skins, features</div></div>
+  </div>
+
+  <div class="charts">
+    <div class="card chart-panel tall">
+      <div class="panel-title"><span><span class="live-dot"></span>Top tags in stock</span><span class="chip chip-grad" id="tagsTotal">—</span></div>
+      <canvas id="tagsChart"></canvas>
+    </div>
+    <div class="card chart-panel">
+      <div class="panel-title"><span>Inventory by status</span></div>
+      <canvas id="statusChart"></canvas>
+    </div>
+    <div class="card chart-panel">
+      <div class="panel-title"><span>Price distribution</span></div>
+      <canvas id="priceChart"></canvas>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="about">
+  <div class="container">
+    <h2>Why TENDHA?</h2>
+    <p class="lead">Every account in the catalog is hand-checked before it goes live. Email access, original credentials, and the skins that make the account valuable — all verified before you pay.</p>
+    <div class="about-grid">
+      <div class="card about-card">
+        <div class="icon" style="background:rgba(74,222,128,.15);color:#4ade80">✓</div>
+        <h3>Full email access</h3>
+        <p>You get the original email and password. The account is fully yours after handover, with no third-party recovery risks.</p>
+      </div>
+      <div class="card about-card">
+        <div class="icon" style="background:rgba(45,212,191,.15);color:#2dd4bf">⚡</div>
+        <h3>Fast delivery</h3>
+        <p>Once payment clears, credentials land in your inbox or DMs the same day — usually within an hour during active hours.</p>
+      </div>
+      <div class="card about-card">
+        <div class="icon" style="background:rgba(251,191,36,.15);color:#fbbf24">🛡</div>
+        <h3>Replacement promise</h3>
+        <p>If an account fails to log in within the first 24 hours after delivery, we replace it free or refund. No drama.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section class="section" id="how">
+  <div class="container">
+    <h2>How to buy</h2>
+    <p class="lead">Three steps. No accounts to register. No checkout flow on this site.</p>
+    <div class="about-grid">
+      <div class="card about-card">
+        <div class="icon" style="background:rgba(96,165,250,.15);color:#60a5fa">1</div>
+        <h3>Browse the catalog</h3>
+        <p>Filter by status, search by skin name, find an account that matches what you want.</p>
+      </div>
+      <div class="card about-card">
+        <div class="icon" style="background:rgba(167,139,250,.15);color:#a78bfa">2</div>
+        <h3>Message us</h3>
+        <p>Click the contact button below. Tell us the account name and your preferred payment method.</p>
+      </div>
+      <div class="card about-card">
+        <div class="icon" style="background:rgba(244,114,182,.15);color:#f472b6">3</div>
+        <h3>Pay & receive</h3>
+        <p>We confirm availability, you pay, you get the credentials. Usually within an hour.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section class="section" id="contact">
+  <div class="container">
+    <h2>Get in touch</h2>
+    <p class="lead">Pick the channel you actually use. Replies are usually within an hour during active hours.</p>
+    <div class="contact-grid">
+      <a class="contact-card" href="https://www.snapchat.com/add/TENDHA6" target="_blank" rel="noopener">
+        <div class="ico" style="background:rgba(251,191,36,.18);color:#fbbf24;font-size:22px">👻</div>
+        <div><div class="label">Snapchat · fastest reply</div><div class="val">TENDHA6</div></div>
+      </a>
+      <a class="contact-card" href="mailto:tendha2020@gmail.com">
+        <div class="ico" style="background:rgba(45,212,191,.15);color:#2dd4bf">@</div>
+        <div><div class="label">Email</div><div class="val">tendha2020@gmail.com</div></div>
+      </a>
+    </div>
+    <p class="lead" style="margin-top:24px;font-size:13px">Want to add Telegram, Discord, or Instagram later? Edit <code style="color:var(--gold)">index.html</code> and <code style="color:var(--gold)">catalog.html</code> to add more contact cards.</p>
+  </div>
+</section>
+
+<footer>
+  <div>© <span id="year"></span> TENDHA Fortnite. All transactions handled directly via the contact channels above.</div>
+  <div style="margin-top:8px">
+    <a href="catalog.html">Catalog</a>
+    <a class="admin-link" href="admin.html">Admin</a>
+  </div>
+</footer>
+
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+
+/* ---- Fortnite skin image loader ---- */
+window.SkinLoader = (function(){
+  const CACHE_KEY = 'tendhaSkinCache_v1';
+  let cache = {};
+  try { cache = JSON.parse(localStorage.getItem(CACHE_KEY) || '{}'); } catch(e){}
+  function save(){ try { localStorage.setItem(CACHE_KEY, JSON.stringify(cache)); } catch(e){} }
+  async function lookup(query){
+    if(!query) return null;
+    const k = String(query).toLowerCase().trim();
+    if(k in cache) return cache[k];
+    try {
+      const r = await fetch('https://fortnite-api.com/v2/cosmetics/br/search?name='+encodeURIComponent(query)+'&matchMethod=contains&type=outfit');
+      if(!r.ok){ cache[k]=null; save(); return null; }
+      const j = await r.json();
+      const url = (j && j.data && j.data.images && (j.data.images.icon || j.data.images.featured || j.data.images.smallIcon)) || null;
+      cache[k] = url; save(); return url;
+    } catch(e){ cache[k]=null; save(); return null; }
+  }
+  async function forItem(item){
+    if(item.image) return item.image;
+    const candidates = (item.tags||[]).slice(0,3).concat([
+      (item.title||'').replace(/\|.*$/,'').replace(/\d+\s*(skins?|ax)/i,'').trim().slice(0,40)
+    ]).filter(Boolean);
+    for(const c of candidates){
+      const url = await lookup(c);
+      if(url) return url;
+    }
+    return null;
+  }
+  return { lookup, forItem };
+})();
+
+/* ---- Toast ---- */
+window.toast = function(msg, kind='info', ttl=2400){
+  let stack = document.getElementById('toastStack');
+  if(!stack){ stack = document.createElement('div'); stack.id='toastStack'; stack.className='toast-stack'; document.body.appendChild(stack); }
+  const ic = kind==='success'?'✔':kind==='error'?'⚠':'ℹ';
+  const el = document.createElement('div');
+  el.className = 'toast '+kind;
+  el.innerHTML = '<span class="ico">'+ic+'</span><span>'+String(msg).replace(/[<>"]/g,'')+'</span>';
+  stack.appendChild(el);
+  setTimeout(()=>{ el.classList.add('gone'); setTimeout(()=>el.remove(), 320); }, ttl);
+};
+
+/* ---- Animated number ---- */
+window.animateNumber = function(el, target, opts={}){
+  const prefix = opts.prefix||''; const suffix=opts.suffix||'';
+  const dur = opts.dur || 900;
+  const start = parseFloat(String(el.textContent).replace(/[^0-9.\-]/g,''))||0;
+  const t0 = performance.now();
+  function step(t){
+    const p = Math.min(1, (t-t0)/dur);
+    const eased = 1-Math.pow(1-p,3);
+    const v = start + (target-start)*eased;
+    el.textContent = prefix + (v >= 1000 ? (v/1000).toFixed(1).replace(/\.0$/,'')+'k' : Math.round(v)) + suffix;
+    if(p<1) requestAnimationFrame(step);
+    else el.textContent = prefix + (target >= 1000 ? (target/1000).toFixed(1).replace(/\.0$/,'')+'k' : Math.round(target)) + suffix;
+  }
+  requestAnimationFrame(step);
+};
+
+// ---- Live dashboard ----
+const cssVar = (name)=>getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+const TEXT = ()=>cssVar('--text');
+const MUTED = ()=>cssVar('--muted');
+const COLORS = ['#2dd4bf','#60a5fa','#a78bfa','#fbbf24','#f472b6','#4ade80','#fb7185','#94a3b8'];
+
+function fmt(n){
+  if(n>=1000) return (n/1000).toFixed(1).replace(/\.0$/,'')+'k';
+  return String(n);
+}
+function money(n){return '$'+(+n||0).toFixed(0);}
+
+function statusGroups(items){
+  const out = {available:0, sold:0, rented:0, reserved:0, other:0};
+  items.forEach(i=>{
+    if(out[i.status]!=null) out[i.status]++;
+    else out.other++;
+  });
+  return out;
+}
+function priceBuckets(items){
+  const b = {'0-25':0,'25-50':0,'50-100':0,'100-200':0,'200+':0};
+  items.forEach(i=>{
+    const p = +i.price||0;
+    if(p<25)b['0-25']++;
+    else if(p<50)b['25-50']++;
+    else if(p<100)b['50-100']++;
+    else if(p<200)b['100-200']++;
+    else b['200+']++;
+  });
+  return b;
+}
+function topTags(items, k=8){
+  const counts = {};
+  items.forEach(i=>{
+    (i.tags||[]).forEach(t=>{ counts[t]=(counts[t]||0)+1; });
+  });
+  const entries = Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,k);
+  return entries;
+}
+
+function renderKPIs(items){
+  const avail = items.filter(i=>i.status==='available').length;
+  const total = items.length;
+  const avg = total ? items.reduce((s,i)=>s+(+i.price||0),0)/total : 0;
+  const tagsCount = new Set(items.flatMap(i=>i.tags||[])).size;
+  animateNumber(document.getElementById('kpi-avail'), avail);
+  animateNumber(document.getElementById('kpi-total'), total);
+  animateNumber(document.getElementById('kpi-avg'), avg, {prefix:'$'});
+  animateNumber(document.getElementById('kpi-tags'), tagsCount);
+}
+
+function makeChart(ctxId, type, labels, data, opts={}){
+  if(!window.Chart) return null;
+  const ctx = document.getElementById(ctxId);
+  if(!ctx) return null;
+  return new Chart(ctx, {
+    type,
+    data: {
+      labels,
+      datasets: [{
+        label: opts.label || '',
+        data,
+        backgroundColor: opts.bg || COLORS,
+        borderColor: opts.border || (type==='line' ? '#2dd4bf' : 'rgba(255,255,255,.06)'),
+        borderWidth: opts.borderWidth ?? 1,
+        borderRadius: type==='bar' ? 6 : 0,
+        tension: .3,
+        fill: type==='line',
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      indexAxis: opts.indexAxis || 'x',
+      plugins: {
+        legend: { display: type==='doughnut', position:'bottom', labels:{ color: TEXT(), font:{ size:11 }, padding:14, boxWidth:10 } },
+        tooltip: { backgroundColor:'#0b1220', titleColor:'#eef4ff', bodyColor:'#eef4ff', borderColor:'#1f2c44', borderWidth:1, padding:10, cornerRadius:8 }
+      },
+      scales: type==='doughnut' ? {} : {
+        x: { ticks:{ color: MUTED(), font:{size:11} }, grid:{ color:'rgba(255,255,255,.04)' } },
+        y: { ticks:{ color: MUTED(), font:{size:11} }, grid:{ color:'rgba(255,255,255,.04)' }, beginAtZero:true }
+      },
+      ...(opts.chartOpts||{})
+    }
+  });
+}
+
+function renderCharts(items){
+  // status doughnut
+  const sg = statusGroups(items);
+  const sgEntries = Object.entries(sg).filter(([k,v])=>v>0);
+  makeChart('statusChart','doughnut',sgEntries.map(e=>e[0]),sgEntries.map(e=>e[1]),{
+    bg: ['#4ade80','#60a5fa','#fbbf24','#a78bfa','#94a3b8'],
+    label: 'Accounts'
+  });
+  // price buckets
+  const pb = priceBuckets(items);
+  makeChart('priceChart','bar',Object.keys(pb),Object.values(pb),{
+    bg: ['#2dd4bf','#60a5fa','#a78bfa','#fbbf24','#f472b6'],
+    label: 'Accounts'
+  });
+  // top tags horizontal
+  const tt = topTags(items, 8);
+  document.getElementById('tagsTotal').textContent = tt.length + ' top';
+  makeChart('tagsChart','bar', tt.map(t=>t[0]), tt.map(t=>t[1]), {
+    indexAxis:'y',
+    bg: tt.map((_,i)=>COLORS[i%COLORS.length]),
+    label: 'Accounts',
+  });
+}
+
+// Boot
+fetch('accounts.json')
+  .then(r=>r.ok?r.json():[])
+  .then(items=>{
+    if(!Array.isArray(items)) items = [];
+    if(!items.length){
+      document.getElementById('kpi-avail').textContent = '0';
+      document.getElementById('kpi-total').textContent = '0';
+      return;
+    }
+    renderKPIs(items);
+    // Charts may need Chart.js to load first (deferred)
+    if(window.Chart){ renderCharts(items); }
+    else { document.querySelector('script[src*="chart.js"]').addEventListener('load',()=>renderCharts(items)); }
+  })
+  .catch(()=>{
+    document.getElementById('kpi-avail').textContent = '—';
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catalog — TENDHA Fortnite</title>
+<meta name="description" content="Browse premium Fortnite accounts available at TENDHA. Live filters, real-time stats, fast delivery.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" defer></script>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="brand">
+      <div class="brand-logo">T</div>
+      <div><span class="b1">TENDHA</span><span class="b2">Fortnite</span></div>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="catalog.html" class="nav-link active">Catalog</a>
+      <a href="index.html#about" class="nav-link">About</a>
+      <a href="index.html#contact" class="nav-link cta show-mobile">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+  <!-- KPI strip on top of catalog -->
+  <section class="kpis" style="margin-top:20px">
+    <div class="card kpi k-green"><div class="v" id="kpi-avail">—</div><div class="k">Available</div><div class="sub-k">Ready to ship</div></div>
+    <div class="card kpi k-blue"><div class="v" id="kpi-total">—</div><div class="k">In catalog</div><div class="sub-k">All listings</div></div>
+    <div class="card kpi k-purple"><div class="v" id="kpi-min">—</div><div class="k">Cheapest</div><div class="sub-k">Lowest price</div></div>
+    <div class="card kpi k-gold"><div class="v" id="kpi-max">—</div><div class="k">Premium</div><div class="sub-k">Highest price</div></div>
+  </section>
+
+  <!-- Mini charts strip -->
+  <section class="charts" style="margin-top:14px">
+    <div class="card chart-panel">
+      <div class="panel-title"><span><span class="live-dot"></span>Live availability</span></div>
+      <canvas id="statusChart"></canvas>
+    </div>
+    <div class="card chart-panel">
+      <div class="panel-title"><span>Price buckets</span></div>
+      <canvas id="priceChart"></canvas>
+    </div>
+    <div class="card chart-panel">
+      <div class="panel-title"><span>Hot tags</span></div>
+      <canvas id="tagsChart"></canvas>
+    </div>
+  </section>
+
+  <!-- Sidebar + grid -->
+  <div class="catalog-app">
+    <aside class="cat-side">
+      <div class="card panel">
+        <div class="panel-title">Filters</div>
+        <div class="filter-group">
+          <label>Status</label>
+          <div class="pill-row" id="statusPills">
+            <button class="pill sm active" data-f="all">All</button>
+            <button class="pill sm" data-f="available">Available</button>
+            <button class="pill sm" data-f="sold">Sold</button>
+            <button class="pill sm" data-f="rented">Rented</button>
+          </div>
+        </div>
+        <div class="filter-group">
+          <label>Price range (USD)</label>
+          <div class="range-row">
+            <input class="input" type="number" id="minPrice" placeholder="Min" min="0">
+            <input class="input" type="number" id="maxPrice" placeholder="Max" min="0">
+          </div>
+        </div>
+        <div class="filter-group">
+          <label>Tag</label>
+          <select id="tagSelect" class="input"><option value="">All tags</option></select>
+        </div>
+        <div class="filter-group">
+          <label>Sort by</label>
+          <select id="sortBy" class="input">
+            <option value="default">Newest first</option>
+            <option value="price-asc">Price: low to high</option>
+            <option value="price-desc">Price: high to low</option>
+            <option value="name">A → Z</option>
+          </select>
+        </div>
+        <button class="btn ghost sm" id="resetBtn" style="width:100%;margin-top:6px">Reset filters</button>
+      </div>
+
+      <div class="card panel" style="margin-top:14px">
+        <div class="panel-title">Need help?</div>
+        <div class="tiny" style="line-height:1.6;margin-bottom:10px">Find what you want, then DM us via your favorite channel. We confirm availability fast.</div>
+        <a href="index.html#contact" class="btn primary sm" style="width:100%">Contact us</a>
+      </div>
+    </aside>
+
+    <main class="cat-main">
+      <div class="search-row">
+        <input class="search-input" id="search" placeholder="Search by skin, account name, tag…">
+      </div>
+      <div class="cat-meta">
+        <div id="meta">Loading inventory…</div>
+        <div class="tiny" id="updatedAt"></div>
+      </div>
+      <div class="cat-grid" id="grid"></div>
+      <div id="loadMoreWrap" style="display:none;justify-content:center;padding:18px 0 32px;flex-direction:column;align-items:center;gap:8px"><button class="btn primary" id="loadMoreBtn">Load more</button><span class="tiny remaining"></span></div>
+    </main>
+  </div>
+</div>
+
+<!-- Detail modal -->
+<div class="detail-modal" id="detailModal">
+  <div class="detail-card">
+    <div class="dh">
+      <img id="dmImg" alt="">
+      <div class="dh-fade"></div>
+      <button class="dx" id="dmClose">×</button>
+    </div>
+    <div class="db">
+      <h3 id="dmTitle">—</h3>
+      <div class="meta">
+        <span class="price" id="dmPrice"></span>
+        <span class="badge" id="dmStatus"></span>
+      </div>
+      <div class="tags-row" id="dmTags"></div>
+      <div class="actions">
+        <a class="btn gold" id="dmBuy" href="#" target="_blank" rel="noopener">👻 Buy via Snapchat — TENDHA6</a>
+        <a class="btn ghost" id="dmEmail" href="#">✉ Send email about this account</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div>© <span id="year"></span> TENDHA Fortnite</div>
+  <div style="margin-top:8px">
+    <a href="index.html">Home</a>
+    <a class="admin-link" href="admin.html">Admin</a>
+  </div>
+</footer>
+
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+
+/* ---- Fortnite skin image loader ---- */
+window.SkinLoader = (function(){
+  const CACHE_KEY = 'tendhaSkinCache_v1';
+  let cache = {};
+  try { cache = JSON.parse(localStorage.getItem(CACHE_KEY) || '{}'); } catch(e){}
+  function save(){ try { localStorage.setItem(CACHE_KEY, JSON.stringify(cache)); } catch(e){} }
+  async function lookup(query){
+    if(!query) return null;
+    const k = String(query).toLowerCase().trim();
+    if(k in cache) return cache[k];
+    try {
+      const r = await fetch('https://fortnite-api.com/v2/cosmetics/br/search?name='+encodeURIComponent(query)+'&matchMethod=contains&type=outfit');
+      if(!r.ok){ cache[k]=null; save(); return null; }
+      const j = await r.json();
+      const url = (j && j.data && j.data.images && (j.data.images.icon || j.data.images.featured || j.data.images.smallIcon)) || null;
+      cache[k] = url; save(); return url;
+    } catch(e){ cache[k]=null; save(); return null; }
+  }
+  async function forItem(item){
+    if(item.image) return item.image;
+    const candidates = (item.tags||[]).slice(0,3).concat([
+      (item.title||'').replace(/\|.*$/,'').replace(/\d+\s*(skins?|ax)/i,'').trim().slice(0,40)
+    ]).filter(Boolean);
+    for(const c of candidates){
+      const url = await lookup(c);
+      if(url) return url;
+    }
+    return null;
+  }
+  return { lookup, forItem };
+})();
+
+/* ---- Toast ---- */
+window.toast = function(msg, kind='info', ttl=2400){
+  let stack = document.getElementById('toastStack');
+  if(!stack){ stack = document.createElement('div'); stack.id='toastStack'; stack.className='toast-stack'; document.body.appendChild(stack); }
+  const ic = kind==='success'?'✔':kind==='error'?'⚠':'ℹ';
+  const el = document.createElement('div');
+  el.className = 'toast '+kind;
+  el.innerHTML = '<span class="ico">'+ic+'</span><span>'+String(msg).replace(/[<>"]/g,'')+'</span>';
+  stack.appendChild(el);
+  setTimeout(()=>{ el.classList.add('gone'); setTimeout(()=>el.remove(), 320); }, ttl);
+};
+
+/* ---- Animated number ---- */
+window.animateNumber = function(el, target, opts={}){
+  const prefix = opts.prefix||''; const suffix=opts.suffix||'';
+  const dur = opts.dur || 900;
+  const start = parseFloat(String(el.textContent).replace(/[^0-9.\-]/g,''))||0;
+  const t0 = performance.now();
+  function step(t){
+    const p = Math.min(1, (t-t0)/dur);
+    const eased = 1-Math.pow(1-p,3);
+    const v = start + (target-start)*eased;
+    el.textContent = prefix + (v >= 1000 ? (v/1000).toFixed(1).replace(/\.0$/,'')+'k' : Math.round(v)) + suffix;
+    if(p<1) requestAnimationFrame(step);
+    else el.textContent = prefix + (target >= 1000 ? (target/1000).toFixed(1).replace(/\.0$/,'')+'k' : Math.round(target)) + suffix;
+  }
+  requestAnimationFrame(step);
+};
+
+const cssVar = (name)=>getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+const COLORS = ['#2dd4bf','#60a5fa','#a78bfa','#fbbf24','#f472b6','#4ade80','#fb7185','#94a3b8'];
+
+let ITEMS = [];
+let state = { status:'all', minPrice:'', maxPrice:'', tag:'', search:'', sortBy:'default' };
+let charts = {};
+let pageSize = 60; let visibleCount = pageSize; let imgObserver = null;
+// Concurrency-limited image queue (max 4 in flight)
+const _imgQueue = []; let _imgInFlight = 0;
+function _runQueue(){ while(_imgInFlight<4 && _imgQueue.length){ const job=_imgQueue.shift(); _imgInFlight++; job().finally(()=>{_imgInFlight--; _runQueue();}); } }
+function queueImage(item, thumb){ _imgQueue.push(()=>SkinLoader.forItem(item).then(url=>{ if(!url){ thumb.classList.remove('loading'); return; } item.image=url; const im=new Image(); im.loading='lazy'; im.onload=()=>{ thumb.classList.remove('loading'); thumb.classList.add('has-rich-ph'); thumb.insertAdjacentElement('afterbegin', im); }; im.onerror=()=>{ thumb.classList.remove('loading'); }; im.src=url; })); _runQueue(); }
+
+function esc(s){return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
+function money(n){return '$'+(+n||0).toFixed(2);}
+function fmt(n){if(n>=1000) return (n/1000).toFixed(1).replace(/\.0$/,'')+'k'; return String(n);}
+
+function getList(){
+  let list = ITEMS.slice();
+  if(state.status!=='all') list = list.filter(i=>i.status===state.status);
+  if(state.minPrice!=='') list = list.filter(i=>(+i.price||0) >= +state.minPrice);
+  if(state.maxPrice!=='') list = list.filter(i=>(+i.price||0) <= +state.maxPrice);
+  if(state.tag) list = list.filter(i=>(i.tags||[]).includes(state.tag));
+  if(state.search){
+    const q = state.search.toLowerCase();
+    list = list.filter(i=>(i.title||'').toLowerCase().includes(q) || (i.tags||[]).some(t=>t.toLowerCase().includes(q)));
+  }
+  if(state.sortBy==='price-asc') list.sort((a,b)=>(+a.price||0)-(+b.price||0));
+  else if(state.sortBy==='price-desc') list.sort((a,b)=>(+b.price||0)-(+a.price||0));
+  else if(state.sortBy==='name') list.sort((a,b)=>String(a.title||'').localeCompare(String(b.title||'')));
+  return list;
+}
+
+function renderCards(reset=true){
+  const grid = document.getElementById('grid');
+  const list = getList();
+  grid.classList.add('refreshing');
+  if(reset) visibleCount = pageSize;
+  const slice = list.slice(0, visibleCount);
+  document.getElementById('meta').innerHTML = '<strong style="color:var(--text)">' + slice.length + '</strong> of ' + list.length + ' shown · ' + ITEMS.length + ' total';
+  if(!list.length){
+    grid.innerHTML = '<div class="empty"><div class="big">◇</div>No accounts match your filters.<br><span style="font-size:13px;opacity:.7">Try clearing filters or a different search.</span></div>';
+    document.getElementById('loadMoreWrap').style.display='none';
+    return;
+  }
+  grid.innerHTML = slice.map((i,idx)=>{
+    const hasImg = !!i.image;
+    const featuredTag = (i.tags && i.tags[0]) ? i.tags[0] : (i.title||'').split(/[|·\u00b7]/)[0].trim().slice(0,28);
+    const skinCount = i.skinCount ? (i.skinCount + ' skins') : ((i.tags||[]).slice(1,3).join(' · ') || 'Premium');
+    const palette = (Math.abs([...(featuredTag||'a')].reduce((a,c)=>a+c.charCodeAt(0),0)) % 8) + 1;
+    const rich = '<div class="ph-rich"><div class="ph-icon">❖</div><div class="ph-name">'+esc(featuredTag.toUpperCase())+'</div><div class="ph-meta">'+esc(skinCount)+'</div></div>';
+    const img = hasImg ? '<img src="'+esc(i.image)+'" alt="" loading="lazy">' : '';
+    const tags = (i.tags||[]).slice(0,3).map(t=>'<span class="tag">'+esc(t)+'</span>').join('');
+    return '<div class="acc-card" data-idx="'+idx+'" data-id="'+esc(i.id||'')+'" data-name="'+esc(i.title)+'" data-status="'+esc(i.status)+'">'
+      +'<div class="thumb thumb-grad-'+palette+(hasImg?' has-rich-ph':'')+'">'+rich+img+'<div class="corner-badge"><span class="badge '+esc(i.status||'available')+'">'+esc(i.status||'available')+'</span></div></div>'
+      +'<div class="body-row">'
+      +'<div class="acc-name">'+esc(i.title)+'</div>'
+      +(tags?'<div class="tags-row">'+tags+'</div>':'')
+      +'<div class="row"><span class="price">'+money(i.price)+'</span></div>'
+      +'</div></div>';
+  }).join('');
+  setTimeout(()=>grid.classList.remove('refreshing'),30);
+  // Toggle Load more button
+  const more = document.getElementById('loadMoreWrap');
+  if(visibleCount < list.length){ more.style.display='flex'; more.querySelector('.remaining').textContent=(list.length-visibleCount)+' more accounts'; }
+  else { more.style.display='none'; }
+  // Lazy-load images via IntersectionObserver
+  if(imgObserver) imgObserver.disconnect();
+  imgObserver = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(!e.isIntersecting) return;
+      const card = e.target;
+      const idx = +card.dataset.idx;
+      const item = slice[idx];
+      imgObserver.unobserve(card);
+      if(!item || item.image) return;
+      const thumb = card.querySelector('.thumb');
+      if(!thumb || !thumb.classList.contains('loading')) return;
+      queueImage(item, thumb);
+    });
+  }, { rootMargin: '200px 0px' });
+  grid.querySelectorAll('.acc-card').forEach(c=>imgObserver.observe(c));
+}
+
+function renderKPIs(){
+  const list = ITEMS;
+  const avail = list.filter(i=>i.status==='available').length;
+  animateNumber(document.getElementById('kpi-avail'), avail);
+  animateNumber(document.getElementById('kpi-total'), list.length);
+  if(list.length){
+    const prices = list.map(i=>+i.price||0).filter(p=>p>0).sort((a,b)=>a-b);
+    if(prices.length){
+      animateNumber(document.getElementById('kpi-min'), prices[0], {prefix:'$'});
+      animateNumber(document.getElementById('kpi-max'), prices[prices.length-1], {prefix:'$'});
+    } else {
+      document.getElementById('kpi-min').textContent='—';
+      document.getElementById('kpi-max').textContent='—';
+    }
+  }
+}
+
+function makeChart(id, type, labels, data, opts={}){
+  if(!window.Chart) return null;
+  const ctx = document.getElementById(id);
+  if(!ctx) return null;
+  if(charts[id]) charts[id].destroy();
+  charts[id] = new Chart(ctx, {
+    type,
+    data: { labels, datasets: [{
+      label: opts.label||'',
+      data,
+      backgroundColor: opts.bg || COLORS,
+      borderWidth: 1,
+      borderRadius: type==='bar' ? 5 : 0,
+      borderColor: 'rgba(255,255,255,.06)'
+    }]},
+    options: {
+      responsive: true, maintainAspectRatio: false, indexAxis: opts.indexAxis||'x',
+      plugins: {
+        legend: { display: type==='doughnut', position:'bottom', labels:{ color: cssVar('--text'), font:{size:10}, padding:10, boxWidth:8 } },
+        tooltip: { backgroundColor:'#0b1220', borderColor:'#1f2c44', borderWidth:1, cornerRadius:8 }
+      },
+      scales: type==='doughnut' ? {} : {
+        x: { ticks:{ color: cssVar('--muted'), font:{size:10} }, grid:{ color:'rgba(255,255,255,.04)' } },
+        y: { ticks:{ color: cssVar('--muted'), font:{size:10} }, grid:{ color:'rgba(255,255,255,.04)' }, beginAtZero:true }
+      }
+    }
+  });
+}
+
+function renderCharts(){
+  if(!window.Chart) return;
+  // Status
+  const sg = ITEMS.reduce((m,i)=>{m[i.status||'other']=(m[i.status||'other']||0)+1;return m;},{});
+  const sgE = Object.entries(sg);
+  makeChart('statusChart','doughnut', sgE.map(e=>e[0]), sgE.map(e=>e[1]), { bg:['#4ade80','#60a5fa','#fbbf24','#a78bfa','#fb7185','#94a3b8'] });
+  // Price
+  const pb = {'0-25':0,'25-50':0,'50-100':0,'100-200':0,'200+':0};
+  ITEMS.forEach(i=>{const p=+i.price||0; if(p<25)pb['0-25']++; else if(p<50)pb['25-50']++; else if(p<100)pb['50-100']++; else if(p<200)pb['100-200']++; else pb['200+']++;});
+  makeChart('priceChart','bar', Object.keys(pb), Object.values(pb), { bg:['#2dd4bf','#60a5fa','#a78bfa','#fbbf24','#f472b6'] });
+  // Tags
+  const counts = {};
+  ITEMS.forEach(i=>(i.tags||[]).forEach(t=>{counts[t]=(counts[t]||0)+1;}));
+  const tt = Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,6);
+  makeChart('tagsChart','bar', tt.map(e=>e[0]), tt.map(e=>e[1]), { indexAxis:'y', bg: tt.map((_,i)=>COLORS[i%COLORS.length]) });
+}
+
+function fillTagOptions(){
+  const sel = document.getElementById('tagSelect');
+  const counts = {};
+  ITEMS.forEach(i=>(i.tags||[]).forEach(t=>{counts[t]=(counts[t]||0)+1;}));
+  const all = Object.entries(counts).sort((a,b)=>b[1]-a[1]).map(e=>e[0]);
+  sel.innerHTML = '<option value="">All tags</option>'+all.map(t=>'<option value="'+esc(t)+'">'+esc(t)+' ('+counts[t]+')</option>').join('');
+}
+
+// Wire events
+document.getElementById('statusPills').addEventListener('click', e=>{
+  const b = e.target.closest('.pill'); if(!b) return;
+  document.querySelectorAll('#statusPills .pill').forEach(p=>p.classList.remove('active'));
+  b.classList.add('active');
+  state.status = b.dataset.f;
+  renderCards();
+});
+document.getElementById('search').addEventListener('input', e=>{ state.search = e.target.value; renderCards(); });
+document.getElementById('sortBy').addEventListener('change', e=>{ state.sortBy = e.target.value; renderCards(); });
+document.getElementById('tagSelect').addEventListener('change', e=>{ state.tag = e.target.value; renderCards(); });
+document.getElementById('minPrice').addEventListener('input', e=>{ state.minPrice = e.target.value; renderCards(); });
+document.getElementById('maxPrice').addEventListener('input', e=>{ state.maxPrice = e.target.value; renderCards(); });
+document.getElementById('loadMoreBtn').addEventListener('click', ()=>{ visibleCount += pageSize; renderCards(false); });
+document.getElementById('resetBtn').addEventListener('click', ()=>{
+  state = { status:'all', minPrice:'', maxPrice:'', tag:'', search:'', sortBy:'default' };
+  document.querySelectorAll('#statusPills .pill').forEach(p=>p.classList.remove('active'));
+  document.querySelector('#statusPills .pill[data-f="all"]').classList.add('active');
+  document.getElementById('search').value='';
+  document.getElementById('sortBy').value='default';
+  document.getElementById('tagSelect').value='';
+  document.getElementById('minPrice').value='';
+  document.getElementById('maxPrice').value='';
+  renderCards();
+});
+
+// Card click -> detail modal
+function openDetail(item){
+  const m = document.getElementById('detailModal');
+  const title = item.title||'—';
+  document.getElementById('dmTitle').textContent = title;
+  document.getElementById('dmPrice').textContent = money(item.price);
+  const sb = document.getElementById('dmStatus');
+  sb.className = 'badge '+(item.status||'available'); sb.textContent = item.status||'available';
+  document.getElementById('dmTags').innerHTML = (item.tags||[]).map(t=>'<span class="tag">'+esc(t)+'</span>').join(' ');
+  const img = document.getElementById('dmImg');
+  const dh = img.parentElement;
+  // Reset
+  let oldRich = dh.querySelector('.ph-rich'); if(oldRich) oldRich.remove();
+  dh.classList.remove('thumb-grad-1','thumb-grad-2','thumb-grad-3','thumb-grad-4','thumb-grad-5','thumb-grad-6','thumb-grad-7','thumb-grad-8');
+  if(item.image){
+    img.src = item.image; img.style.display='block';
+  } else {
+    img.style.display='none';
+    const ft = (item.tags && item.tags[0]) ? item.tags[0] : (item.title||'').split(/[|·\u00b7]/)[0].trim().slice(0,28);
+    const sk = item.skinCount ? (item.skinCount + ' skins') : ((item.tags||[]).slice(1,3).join(' · ') || 'Premium');
+    const pal = (Math.abs([...(ft||'a')].reduce((a,c)=>a+c.charCodeAt(0),0)) % 8) + 1;
+    dh.classList.add('thumb-grad-'+pal);
+    dh.insertAdjacentHTML('afterbegin','<div class="ph-rich" style="position:absolute;inset:0"><div class="ph-icon" style="font-size:64px">❖</div><div class="ph-name" style="font-size:28px">'+esc(ft.toUpperCase())+'</div><div class="ph-meta" style="font-size:14px">'+esc(sk)+'</div></div>');
+    SkinLoader.forItem(item).then(url=>{ if(url){ const r=dh.querySelector('.ph-rich'); if(r) r.remove(); img.src=url; img.style.display='block'; item.image=url; } });
+  }
+  const isAvail = (item.status||'available')==='available';
+  const buy = document.getElementById('dmBuy');
+  buy.href = 'https://www.snapchat.com/add/TENDHA6';
+  buy.textContent = isAvail ? '\👻 Buy via Snapchat — TENDHA6' : '\👻 Ask if available again — TENDHA6';
+  document.getElementById('dmEmail').href = 'mailto:tendha2020@gmail.com?subject='+encodeURIComponent('Inquiry: '+title);
+  m.classList.add('open');
+}
+document.getElementById('grid').addEventListener('click', e=>{
+  const card = e.target.closest('.acc-card'); if(!card) return;
+  const id = card.dataset.id;
+  const item = ITEMS.find(x=>x.id===id) || ITEMS[+card.dataset.idx];
+  if(!item) return;
+  openDetail(item);
+});
+document.getElementById('dmClose').onclick = ()=>document.getElementById('detailModal').classList.remove('open');
+document.getElementById('detailModal').onclick = e=>{ if(e.target.id==='detailModal') document.getElementById('detailModal').classList.remove('open'); };
+document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ document.getElementById('detailModal').classList.remove('open'); }});
+
+// Boot
+fetch('accounts.json')
+  .then(r=>{
+    if(!r.ok) throw new Error('not found');
+    return r.json();
+  })
+  .then(data=>{
+    ITEMS = Array.isArray(data) ? data : [];
+    if(!ITEMS.length){
+      document.getElementById('meta').textContent = 'No accounts published yet — check back soon.';
+      document.getElementById('grid').innerHTML = '<div class="empty"><div class="big">◇</div>The catalog is being updated.</div>';
+      renderKPIs();
+      return;
+    }
+    fillTagOptions();
+    renderKPIs();
+    renderCards();
+    document.getElementById('updatedAt').textContent = 'Last updated: ' + new Date().toLocaleDateString();
+    setTimeout(()=>toast('Loaded '+ITEMS.length+' accounts','success'), 200);
+    if(window.Chart) renderCharts();
+    else { document.querySelector('script[src*="chart.js"]').addEventListener('load', renderCharts); }
+  })
+  .catch(()=>{
+    document.getElementById('meta').textContent = 'Could not load inventory.';
+    document.getElementById('grid').innerHTML = '<div class="empty"><div class="big">!</div>Inventory file (accounts.json) not found.<br><span style="font-size:13px;opacity:.7">If you are the admin, publish from the dashboard first.</span></div>';
+  });
+</script>
+</body>
+</html>
